@@ -23,7 +23,10 @@ public class JpaTest {
 		EntityTransaction tx = manager.getTransaction();
 		tx.begin();
 		try {
-
+			Client c = new Client("John Doe", "	");
+			manager.persist(c);
+			Client c2 = new Client("Jane Doe", "wshlamecri@gmail.com");
+			manager.persist(c2);
 			// TODO create and persist entity
 		} catch (Exception e) {
 			e.printStackTrace();
