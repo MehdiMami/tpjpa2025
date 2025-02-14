@@ -39,19 +39,19 @@ public class JpaTest {
 	}
 
 	private void createEntities() {
-		// Create and persist Users
+
 		User user1 = new User("Alice Johnson", "alice.johnson@example.com");
 		User user2 = new User("Bob Brown", "bob.brown@example.com");
 		manager.persist(user1);
 		manager.persist(user2);
 
-		// Create and persist Events
+
 		Event event1 = new Event("Music Concert", "New York", new Date(), "Music");
 		Event event2 = new Event("Art Exhibition", "Paris", new Date(), "Art");
 		manager.persist(event1);
 		manager.persist(event2);
 
-		// Create and persist PremiumTickets
+
 		PremiumTicket premiumTicket1 = new PremiumTicket("VIP", 150.0, event1, "A1");
 		premiumTicket1.setUser(user1);
 		PremiumTicket premiumTicket2 = new PremiumTicket("VIP", 200.0, event2, "B1");
@@ -59,7 +59,7 @@ public class JpaTest {
 		manager.persist(premiumTicket1);
 		manager.persist(premiumTicket2);
 
-		// Create and persist LastMinuteTickets
+
 		LastMinuteTicket lastMinuteTicket1 = new LastMinuteTicket("Regular", 50.0, event1);
 		lastMinuteTicket1.setUser(user2);
 		LastMinuteTicket lastMinuteTicket2 = new LastMinuteTicket("Regular", 75.0, event2);
@@ -69,12 +69,10 @@ public class JpaTest {
 	}
 
 	private void runQueries() {
-		// Named query to find all PremiumTickets
 		TypedQuery<PremiumTicket> namedQuery = manager.createNamedQuery("PremiumTicket.findAll", PremiumTicket.class);
 		List<PremiumTicket> premiumTickets = namedQuery.getResultList();
 		System.out.println("Named Query - All PremiumTickets: " + premiumTickets);
 
-		// Normal query to find all LastMinuteTickets
 		Query query = manager.createQuery("SELECT l.user.name FROM LastMinuteTicket l");
 		List<LastMinuteTicket> lastMinuteTickets = query.getResultList();
 		System.out.println("Normal Query - All LastMinuteTickets: " + lastMinuteTickets);
