@@ -1,9 +1,0 @@
-Service\TicketService.class
-Entity\Event.class
-Entity\Ticket.class
-Entity\User.class
-Service\EventService.class
-Service\UserService.class
-DAO\EventDAO.class
-DAO\TicketDAO.class
-DAO\UserDAO.class

@@ -1,32 +1,50 @@
 package Service;
 
-import DAO.TicketDAO;
-import Entity.Event;
-import Entity.Ticket;
-
+import DAO.LastMinuteTicketDAO;
+import DAO.PremiumTicketDAO;
+import Entity.PremiumTicket;
+import Entity.LastMinuteTicket;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 
 public class TicketService {
-    private TicketDAO ticketDAO;
+    private PremiumTicketDAO premiumTicketDAO;
+    private LastMinuteTicketDAO lastMinuteTicketDAO;
 
-    public TicketService(TicketDAO ticketDAO) {
-        this.ticketDAO = ticketDAO;
+    public TicketService(EntityManager entityManager) {
+        this.premiumTicketDAO = new PremiumTicketDAO(entityManager);
+        this.lastMinuteTicketDAO = new LastMinuteTicketDAO(entityManager);
     }
 
-    public void createTicket(String type, double price, Event event) {
-        Ticket ticket = new Ticket(type, price, event);
-        ticketDAO.save(ticket);
+    public void savePremiumTicket(PremiumTicket premiumTicket) {
+        premiumTicketDAO.save(premiumTicket);
     }
 
-    public Ticket getTicketById(Long id) {
-        return ticketDAO.findById(id);
+    public PremiumTicket findPremiumTicketById(Long id) {
+        return premiumTicketDAO.findById(id);
     }
 
-    public List<Ticket> getAllTickets() {
-        return ticketDAO.findAll();
+    public List<PremiumTicket> findAllPremiumTickets() {
+        return premiumTicketDAO.findAll();
     }
 
-    public void deleteTicket(Ticket ticket) {
-        ticketDAO.delete(ticket);
+    public void deletePremiumTicket(PremiumTicket premiumTicket) {
+        premiumTicketDAO.delete(premiumTicket);
+    }
+
+    public void saveLastMinuteTicket(LastMinuteTicket lastMinuteTicket) {
+        lastMinuteTicketDAO.save(lastMinuteTicket);
+    }
+
+    public LastMinuteTicket findLastMinuteTicketById(Long id) {
+        return lastMinuteTicketDAO.findById(id);
+    }
+
+    public List<LastMinuteTicket> findAllLastMinuteTickets() {
+        return lastMinuteTicketDAO.findAll();
+    }
+
+    public void deleteLastMinuteTicket(LastMinuteTicket lastMinuteTicket) {
+        lastMinuteTicketDAO.delete(lastMinuteTicket);
     }
 }

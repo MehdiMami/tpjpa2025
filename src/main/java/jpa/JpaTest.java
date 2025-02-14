@@ -2,10 +2,14 @@ package jpa;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.Query;
 import Entity.Event;
 import Entity.User;
-import Entity.Ticket;
+import Entity.PremiumTicket;
+import Entity.LastMinuteTicket;
 import java.util.Date;
+import java.util.List;
 
 public class JpaTest {
 
@@ -23,6 +27,7 @@ public class JpaTest {
 		tx.begin();
 		try {
 			test.createEntities();
+			test.runQueries();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -46,18 +51,32 @@ public class JpaTest {
 		manager.persist(event1);
 		manager.persist(event2);
 
-		// Create and persist Tickets
-		Ticket ticket1 = new Ticket("VIP", 150.0, event1);
-		ticket1.setUser(user1);
-		Ticket ticket2 = new Ticket("Regular", 50.0, event1);
-		ticket2.setUser(user2);
-		Ticket ticket3 = new Ticket("VIP", 200.0, event2);
-		ticket3.setUser(user1);
-		Ticket ticket4 = new Ticket("Regular", 75.0, event2);
-		ticket4.setUser(user2);
-		manager.persist(ticket1);
-		manager.persist(ticket2);
-		manager.persist(ticket3);
-		manager.persist(ticket4);
+		// Create and persist PremiumTickets
+		PremiumTicket premiumTicket1 = new PremiumTicket("VIP", 150.0, event1, "A1");
+		premiumTicket1.setUser(user1);
+		PremiumTicket premiumTicket2 = new PremiumTicket("VIP", 200.0, event2, "B1");
+		premiumTicket2.setUser(user1);
+		manager.persist(premiumTicket1);
+		manager.persist(premiumTicket2);
+
+		// Create and persist LastMinuteTickets
+		LastMinuteTicket lastMinuteTicket1 = new LastMinuteTicket("Regular", 50.0, event1);
+		lastMinuteTicket1.setUser(user2);
+		LastMinuteTicket lastMinuteTicket2 = new LastMinuteTicket("Regular", 75.0, event2);
+		lastMinuteTicket2.setUser(user2);
+		manager.persist(lastMinuteTicket1);
+		manager.persist(lastMinuteTicket2);
+	}
+
+	private void runQueries() {
+		// Named query to find all PremiumTickets
+		TypedQuery<PremiumTicket> namedQuery = manager.createNamedQuery("PremiumTicket.findAll", PremiumTicket.class);
+		List<PremiumTicket> premiumTickets = namedQuery.getResultList();
+		System.out.println("Named Query - All PremiumTickets: " + premiumTickets);
+
+		// Normal query to find all LastMinuteTickets
+		Query query = manager.createQuery("SELECT l.user.name FROM LastMinuteTicket l");
+		List<LastMinuteTicket> lastMinuteTickets = query.getResultList();
+		System.out.println("Normal Query - All LastMinuteTickets: " + lastMinuteTickets);
 	}
 }
